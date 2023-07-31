@@ -16,7 +16,6 @@ loaderElem.classList.add('is-hidden');
 errorElem.classList.add('is-hidden');
 
 let arrNamesId = [];
-console.log(arrNamesId);
 
 fetchBreeds()
   .then(data => {
