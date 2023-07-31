@@ -1,5 +1,7 @@
 .is-hidden {
-  display: none;
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
 }
 
 .breed-select {
