@@ -1,9 +1,9 @@
-import './styles.css';
-
 import SlimSelect from 'slim-select';
 import 'slim-select/dist/slimselect.css';
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
+import './styles.css';
 
 import { fetchBreeds, fetchCatByBreed } from './cat-api';
 
@@ -40,26 +40,26 @@ function handleChange(evt) {
   selectElem.classList.add('is-hidden');
   catsElem.classList.add('is-hidden');
 
-  const breedId = evt.currentTarget.value;
+  const nameId = evt.currentTarget.value;
 
-  fetchCatByBreed(breedId)
+  fetchCatByBreed(nameId)
     .then(data => {
-
       loaderElem.classList.remove('loader');
       loaderElem.classList.add('is-hidden');
       selectElem.classList.remove('is-hidden');
 
       const markup = `
     <div>
-      <img src="${data[0].url}" alt="${data[0].breeds[0].name}" width="400"/>
+      <img src="${data[0].url}" alt="${data[0].breeds[0].name}"/>
     </div>
     <div class="text">
       <h1>${data[0].breeds[0].name}</h1>
       <p>${data[0].breeds[0].description}</p>
-      <p><b>Temperament:</b>${data[0].breeds[0].temperament}</p>
+      <p><b>Temperament: </b>${data[0].breeds[0].temperament}</p>
     </div>`;
 
       catsElem.innerHTML = ('beforeend', markup);
+
       catsElem.classList.remove('is-hidden');
     })
     .catch(
