@@ -12,41 +12,36 @@ const loaderElem = document.querySelector('.loader');
 const errorElem = document.querySelector('.error');
 const catsElem = document.querySelector('.cat-info');
 
-loaderElem.classList.add('is-hidden');
-errorElem.classList.add('is-hidden');
-
-let arrNamesId = [];
+loaderElem.classList.add('hidden');
+errorElem.classList.add('hidden');
 
 fetchBreeds()
   .then(data => {
+    let arrNamesId = [];
     data.forEach(cat => {
-      arrNamesId.push({text: cat.name, value: cat.id});
+      arrNamesId.push({ text: cat.name, value: cat.id });
     });
     new SlimSelect({
       select: selectElem,
       data: arrNamesId,
     });
   })
-  .catch(Notify.failure(`Oops! Something went wrong! Try reloading the page!`));
+  .catch(() => {
+    Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
+  });
 
-
-  selectElem.addEventListener('change', handleChange);
-
+selectElem.addEventListener('change', handleChange);
 
 function handleChange(evt) {
 
-  loaderElem.classList.remove('is-hidden');
-  loaderElem.classList.add('loader');
-  selectElem.classList.add('is-hidden');
-  catsElem.classList.add('is-hidden');
+  loaderElem.classList.replace('hidden', 'loader');
+  catsElem.classList.add('hidden');
 
   const breedId = evt.currentTarget.value;
 
   fetchCatByBreed(breedId)
     .then(data => {
-      loaderElem.classList.remove('loader');
-      loaderElem.classList.add('is-hidden');
-      selectElem.classList.remove('is-hidden');
+      loaderElem.classList.replace('loader', 'hidden');
 
       const markup = `
     <div>
@@ -60,9 +55,9 @@ function handleChange(evt) {
 
       catsElem.innerHTML = ('beforeend', markup);
 
-      catsElem.classList.remove('is-hidden');
+      catsElem.classList.remove('hidden');
     })
-    .catch(
-      Notify.failure(`Oops! Something went wrong! Try reloading the page!`)
-    );
-};
+    .catch(() => {
+      Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
+  });
+}
