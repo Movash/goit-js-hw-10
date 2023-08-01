@@ -33,17 +33,21 @@ fetchBreeds()
 selectElem.addEventListener('change', handleChange);
 
 function handleChange(evt) {
-
   loaderElem.classList.replace('hidden', 'loader');
-  catsElem.classList.add('hidden');
-
+  catsElem.innerHTML = '';
   const breedId = evt.currentTarget.value;
-
   fetchCatByBreed(breedId)
     .then(data => {
       loaderElem.classList.replace('loader', 'hidden');
+      createMarkup(data)
+    })
+    .catch(() => {
+      Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
+  });
+}
 
-      const markup = `
+const createMarkup = data => {
+  const markup = `
     <div>
       <img src="${data[0].url}" alt="${data[0].breeds[0].name}"/>
     </div>
@@ -52,12 +56,6 @@ function handleChange(evt) {
       <p>${data[0].breeds[0].description}</p>
       <p><b>Temperament: </b>${data[0].breeds[0].temperament}</p>
     </div>`;
-
-      catsElem.innerHTML = ('beforeend', markup);
-
-      catsElem.classList.remove('hidden');
-    })
-    .catch(() => {
-      Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
-  });
-}
+    
+  catsElem.innerHTML = ('beforeend', markup);
+};
