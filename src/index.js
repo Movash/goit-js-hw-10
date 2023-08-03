@@ -15,22 +15,24 @@ const catsElem = document.querySelector('.cat-info');
 loaderElem.classList.add('hidden');
 errorElem.classList.add('hidden');
 
+selectElem.addEventListener('change', handleChange);
+
 fetchBreeds()
   .then(data => {
-    let arrNamesId = [];
-    data.forEach(cat => {
-      arrNamesId.push({ text: cat.name, value: cat.id });
-    });
+const namesMarkup = data
+  .map(cat => {
+    return `<option value="${cat.id}">${cat.name}</option>`;
+  })
+  .join('');
+selectElem.insertAdjacentHTML('beforeend', namesMarkup);
+
     new SlimSelect({
       select: selectElem,
-      data: arrNamesId,
     });
   })
   .catch(() => {
     Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
   });
-
-selectElem.addEventListener('change', handleChange);
 
 function handleChange(evt) {
   loaderElem.classList.replace('hidden', 'loader');
@@ -39,7 +41,7 @@ function handleChange(evt) {
   fetchCatByBreed(breedId)
     .then(data => {
       loaderElem.classList.replace('loader', 'hidden');
-      createMarkup(data)
+      createMarkup(data);
     })
     .catch(() => {
       Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
